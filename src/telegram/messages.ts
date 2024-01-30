@@ -1,7 +1,8 @@
 import { Commit, PushWebhookPayload } from "../github/webhook.types";
 
 const formatCommit = (commit: Commit) => {
-  let html = `SHA: <b>${commit.id}</b>
+  let html = `
+SHA: <b>${commit.id}</b>
 <a href="${commit.url}">Link to Commit</a>
 Message:
 <b>${commit.message}</b>
@@ -18,27 +19,21 @@ E-Mail: <i>${commit.committer.email ? commit.committer.email : "N/A"}</i>
   if (commit.removed.length > 0) {
     html += `
 Removed Files:
-<code>${commit.removed.map((e, index) => {
-      return `${e}${index !== commit.removed.length - 1 ? "," : ""}\n`;
-    })}</code>
+<pre>${JSON.stringify(commit.removed, null, 2)}</pre>
 `;
   }
 
   if (commit.added.length > 0) {
     html += `
 Added Files:
-<code>${commit.added.map((e, index) => {
-      return `${e}${index !== commit.added.length - 1 ? "," : ""}\n`;
-    })}</code>
+<pre>${JSON.stringify(commit.added, null, 2)}</pre>
 `;
   }
 
   if (commit.modified.length > 0) {
     html += `
 Modified Files:
-<code>${commit.modified.map((e, index) => {
-      return `${e}${index !== commit.modified.length - 1 ? "," : ""}\n`;
-    })}</code>
+<pre>${JSON.stringify(commit.modified, null, 2)}</pre>
 `;
   }
 
@@ -69,11 +64,12 @@ Name: <b>${payload.pusher.name}</b>
 E-Mail: <b>${payload.pusher.email}</b>
 `;
     if (payload.commits.length > 0) {
+      const commits = payload.commits
+        .map((e) => formatCommit(e))
+        .join("--------------------------------------------------\n");
       html += `
 <b>Commit(s) Information</b>
-${payload.commits.map((e) => {
-  return formatCommit(e);
-})}
+${commits}
 `;
     }
     return html;
@@ -101,11 +97,12 @@ Name: <b>${payload.pusher.name}</b>
 E-Mail: <b>${payload.pusher.email}</b>
 `;
     if (payload.commits.length > 0) {
+      const commits = payload.commits
+        .map((e) => formatCommit(e))
+        .join("--------------------------------------------------\n");
       html += `
 <b>Commit(s) Information</b>
-${payload.commits.map((e) => {
-  return formatCommit(e);
-})}
+${commits}
 `;
     }
 
@@ -134,11 +131,12 @@ E-Mail: <b>${payload.pusher.email}</b>
 `;
 
     if (payload.commits.length > 0) {
+      const commits = payload.commits
+        .map((e) => formatCommit(e))
+        .join("--------------------------------------------------\n");
       html += `
 <b>Commit(s) Information</b>
-${payload.commits.map((e) => {
-  return formatCommit(e);
-})}
+${commits}
 `;
     }
     return html;

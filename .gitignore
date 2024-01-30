@@ -1,0 +1,18 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore package-lock.json
+package-lock.json
+
+# Ignore yarn related files and folders
+yarn.lock
+yarn-cache/
+
+# Ignore the .env and .env.example
+.env
+
+# Ignore dist directory (build artifacts)
+dist/
+
+# Ignore .DS_Store files generated on Macs
+*.DS_Store
